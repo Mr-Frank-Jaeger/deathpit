@@ -10,6 +10,8 @@ from colorama import Fore, Style, init
 #import custom classes
 from character import Character
 from weapon import Sword, Mace, Dagger
+from room import Room
+from combat import combat
 
 #charater creator
 def create_character():
@@ -43,7 +45,35 @@ def create_character():
         return player
 
 #define Rooms
-#TODO: add rooms, exits, descriptions of rooms and things
+def create_world():
+    # create rooms and connect
+
+    #create rooms
+    entrance = Room('Cave Entrance', 'A dark cave stands before you before the mountain')
+    hallway = Room('Stone Hallway', 'A stone corridor with torches on the walls.')
+    arena = Room('Death Pit Areaa', 'The infamous death pit! Bones litter the floor')
+    treasure = Room('Tresure Room', 'A small room holding but only a single chest')
+
+    # connect rooms (bidirectional)
+    #entrance
+    entrance.add_exit('north', hallway)
+    hallway.add_exit('south', entrance)
+    entrance.add_enemy(Character('Gerblin', 50, 5, Dagger(), 15))
+
+    # hallway
+    hallway.add_exit('north', arena)
+    arena.add_exit('south', hallway)
+    hallway.add_exit('east', treasure)
+    treasure.add_exit('west', hallway)
+
+    #treasure
+
+    #arena
+    arena.add_enemy(Character('Gerblin', 50, 5, Dagger(), 15))
+    arena.add_enemy(Character('Orc', 75, 10, Mace(), 0))
+
+    # return the starting room
+    return entrance
 
 
 
@@ -80,70 +110,43 @@ def main():
     #start character creation
     player = create_character()
 
-    #create list of enemies in the room
-    enemies = []
-    enemies.append(Character('Gerblin', 50, 5, Sword(), 10))
-    enemies.append(Character('Orc', 75, 10, Mace(), 0))
+    # create world
+    current_room = create_world()
 
 
-    print(Fore.CYAN + '======')
-    print(Fore.CYAN + 'FIGHT!')
-    print(Fore.CYAN + '======\n')
 
+    # main game loop
+    playing = True
+    while playing and player.is_alive():
+        # show current room
+        current_room.describe()
 
-    #create combat loop
-    combat = True
-    action = ""
-    while combat == True:
-        #player turn
-        print(Fore.RED + f'===ENEMIES===')
-        for i, enemy in enumerate(enemies):
-            print(Fore.RED + f'{i+1}. {enemy.name} - Health: {enemy.health} Armor: {enemy.armor}')
-        player.stats()
-        action = input(Fore.GREEN + 'Your turn (attack or defend): ')
-        if action == "attack":
-            target_num = input('Which enemy? (enter number): ')
-            target_index = int(target_num) - 1
-            if 0 <= target_index < len(enemies):
-                target = enemies[target_index]
-                player.attack(target)
-            else:
-                print('You are lose your concentration...')
-                continue
-            #check for if its dead
-            if not target.is_alive():
-                print(f'The {target.name} is dead!\n')
-                enemies.remove(target)
-                if len(enemies) == 0:
-                    print('All enemies are defeated!\n')
-                    print('You survived the Death Pit!!!\n')
-                    combat = False
-                    break
-        elif action == "defend":
-            player.defend()
+        # if enemies in room, must fight
+        if current_room.enemies:
+            combat_result = combat(player, current_room)
+            if not combat_result:
+                playing = False
+                break
         else:
-            print("NOPE! either attack or defend\n")
-            continue
+            # no enemies, player can move or quit
+            action = input(Fore.GREEN + 'What do you want to do? (move/quit): ').lower() 
 
-        #enemy turn
-        for enemy in enemies:
-            #enemy.stats()      
-            print(Fore.RED + f"----------------------")
-            print(Fore.RED + f"{enemy.name}'s turn...")
-            print(Fore.RED + f"----------------------")
-            time.sleep(2)
-            enemy_action = random.randint(1,3)
-            if enemy_action == 1:
-                enemy.attack(player)
-                if not player.is_alive():
-                    print(Fore.RED + f'YOU DIED\n')
-                    combat = False
-                    break
-            elif enemy_action == 2:
-                enemy.defend()
-            elif enemy_action == 3:
-                enemy.do_nothing()
-    pass
+            if action == 'quit':
+                print('Thanks for playing!')
+                playing = False
+            elif action == 'move':
+                if current_room.exits:
+                    direction = input(f'Which direction? ({", ".join(current_room.exits.keys())}): ').lower()
+                    if direction in current_room.exits:
+                        current_room = current_room.exits[direction]
+                        print(f'\nYou move {direction}...\n')
+                        time.sleep(1)
+                    else:
+                        print('You cannot go that way!\n')
+                else:
+                    print('There are no exits! You are trapped!\n')
+            else:
+                print('Invalid command!\n')
 
 # call main to start game
 if __name__ == '__main__':
