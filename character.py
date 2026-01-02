@@ -12,6 +12,30 @@ class Character:
         self.armor = armor
         self.weapon = weapon
         self.dex = dex
+        self.inventory = []
+        self.drops = []
+
+    def add_item(self, item):
+        # add item to inventory
+        self.inventory.append(item)
+        print(f'{self.name} picked up {item.name}.\n')
+
+    def has_item(self, item_type):
+        # check if player as an item
+        for item in self.inventory:
+            if isinstance(item, item_type):
+                return item
+        return None
+
+    def show_inventory(self):
+        # display inventory to player
+        if not self.inventory:
+            print('Your inventory is empty.\n')
+        else:
+            print('Inventory:')
+            for item in self.inventory:
+                print(f' - {item.name}: {item.description}')
+            print()
 
     def attack(self, target):
         dodge_chance = random.randint(1,100)

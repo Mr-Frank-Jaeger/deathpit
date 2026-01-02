@@ -38,6 +38,12 @@ def combat(player, room):
 
                     if not target.is_alive():
                         print(f'The {target.name} is defeated!\n')
+                        
+                        # drop item?
+                        if target.drops:
+                            for item in target.drops:
+                                room.add_item(item)
+                                print(f'{target.name} dropped {item.name}!\n')
                         room.remove_enemy(target)
 
                         if len(enemies) == 0:
@@ -63,6 +69,7 @@ def combat(player, room):
             print(Fore.RED + f"----------------------")
             time.sleep(2)
 
+            #if only 1 enemey it will never do nothing
             if len(enemies) == 1:
                 enemy_action = random.randint(1,2)
             else:
