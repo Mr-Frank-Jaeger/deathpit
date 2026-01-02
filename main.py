@@ -59,10 +59,7 @@ def create_world():
     #entrance
     entrance.add_exit('north', hallway)
     hallway.add_exit('south', entrance)
-    #gerblin = Character('Gerblin', 50, 5, Dagger(), 15)
-    gerblin = Character('Gerblin', 1, 5, Dagger(), 15)
-    #FLAG: remove test key
-    gerblin.drops.append(Key())
+    gerblin = Character('Gerblin', 50, 5, Dagger(), 15)
     entrance.add_enemy(gerblin)
 
     # hallway
