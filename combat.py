@@ -25,10 +25,18 @@ def combat(player, room):
             print(Fore.RED + f'{i+1}. {enemy.name} - Health: {enemy.health} Armor: {enemy.armor}')
 
         player.stats()
-        action = input(Fore.GREEN + 'Your turn (attack or defend): ').lower()
+        choice = input(Fore.GREEN + 'Your turn (attack or defend): ').lower()
+
+        try:
+            # User is impatient and sends something like 'attack [NUM]'
+            action, target_num = choice.split()
+        except ValueError:
+            action = choice
+            target_num = None
 
         if action == 'attack':
-            target_num = input('Which enemy? (enter number): ')
+            if not target_num:
+                target_num = input('Which enemy? (enter number): ')
             print()
             try:
                 target_index = int(target_num) - 1
@@ -57,6 +65,8 @@ def combat(player, room):
                 continue
 
         elif action == 'defend':
+            if target_num:
+                print("You cannot defend against a specific target; entering defensive stance.")
             player.defend()
         else:
             print("NOPE! either attack or defend\n")
