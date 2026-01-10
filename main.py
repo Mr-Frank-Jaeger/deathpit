@@ -139,7 +139,21 @@ def main():
                 break
         else:
             # no enemies, player can move or quit
-            action = input(Fore.GREEN + 'What do you want to do? (move/take/use/equip/inventory/equipment/quit): ').lower() 
+            choice = input(Fore.GREEN + 'What do you want to do? (move/take/use/equip/inventory/equipment/quit): ').lower() 
+            try:
+                # User is impatient and sends something like 'move north' or 'take 1'
+                action, tgt = choice.split()
+            except ValueError:
+                action = choice
+            else:
+                try:
+                    item_num = int(tgt)
+                except ValueError:
+                    # target of action is not a number; must be a direction
+                    item_num = None
+                    direction = tgt.strip()
+                else:
+                    direction = None
 
             if action == 'quit':
                 print('Thanks for playing!')
@@ -158,7 +172,8 @@ def main():
                     for i, item in enumerate(current_room.items):
                         print(f'{i+1}. {item.name}')
 
-                    item_num = input('Which item? (enter number): ')
+                    if not item_num:
+                        item_num = input('Which item? (enter number): ')
                     try:
                         item_index = int(item_num) - 1
                         if 0 <= item_index < len(current_room.items):
@@ -216,7 +231,8 @@ def main():
 
             elif action == 'move':
                 if current_room.exits:
-                    direction = input(f'Which direction? ({", ".join(current_room.exits.keys())}): ').lower()
+                    if not direction:
+                        direction = get_direction_from_user(current_room.exits)
                     if direction in current_room.exits:
                         current_room = current_room.exits[direction]
                         print(f'\nYou move {direction}...\n')
@@ -227,6 +243,31 @@ def main():
                     print('There are no exits! You are trapped!\n')
             else:
                 print('Invalid command!\n')
+
+
+def get_direction_from_user(exits: dict) -> str:
+    """Prompt the user to move in a direction.
+
+    If only one direction is possible, an empty input chooses that by default.
+
+    Args:
+        exits: Options for movement from the given room
+
+    Returns: Direction to move in.
+    """
+    exit_options = list(exits.keys())
+    exit_options_str = ", ".join(exit_options)
+    choice_prompt = f"Which direction? ({exit_options_str}): "
+    choice = input(choice_prompt).lower()
+
+    only_choice = exit_options[0] if len(exit_options) == 1 else None
+    if only_choice and not choice:
+        print(f"Empty selection, defaulting to {only_choice}")
+        return only_choice
+    else:
+        return choice
+    
+
 
 # call main to start game
 if __name__ == '__main__':
