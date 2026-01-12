@@ -104,9 +104,9 @@ def main():
         weapon: sword, dagger, or mace. Weapons always damage armor even if
         only 1 damage is dealt. 
             weapon  damage  armor_damage
-            sword   25  10
-            mace    20  25
-            dagger  15  5
+            sword     25        10
+            mace      20        25
+            dagger    15        5
     You have two acations: attack and defend:
         attack: swing with you weapon. damage = weapon damage - defender's armor
         defend: increase armor by 5 to a max of 25. I hope you enjoy!
