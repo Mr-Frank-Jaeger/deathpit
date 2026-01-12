@@ -30,11 +30,11 @@ def create_character():
             health = 100
             armor = 20
             weapon = Sword() 
-            dex = 10
+            dex = 20
         elif p_class_pick == '2':
             p_class = 'Rogue'
             health = 75
-            armor = 10
+            armor = 15
             weapon = Dagger() 
             dex = 40
         else:
@@ -59,7 +59,7 @@ def create_world():
     #entrance
     entrance.add_exit('north', hallway)
     hallway.add_exit('south', entrance)
-    gerblin = Character('Gerblin', 50, 5, Dagger(), 15)
+    gerblin = Character('Gerblin', 50, 5, Dagger(), 5)
     entrance.add_enemy(gerblin)
 
     # hallway
@@ -73,7 +73,7 @@ def create_world():
     treasure.add_item(chest)
 
     #arena
-    arena.add_enemy(Character('Gerblin', 50, 5, Dagger(), 15))
+    arena.add_enemy(Character('Gerblin', 50, 5, Dagger(), 5))
     orc = Character('Orc', 75, 10, Mace(), 0)
     orc.drops.append(Key())
     arena.add_enemy(orc)
