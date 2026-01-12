@@ -73,7 +73,7 @@ def create_world():
     treasure.add_item(chest)
 
     #arena
-    arena.add_enemy(gerblin)
+    arena.add_enemy(Character('Gerblin', 50, 5, Dagger(), 15))
     orc = Character('Orc', 75, 10, Mace(), 0)
     orc.drops.append(Key())
     arena.add_enemy(orc)
