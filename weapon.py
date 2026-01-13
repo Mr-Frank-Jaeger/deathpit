@@ -28,7 +28,7 @@ class Sword(Weapon):
 
 class Mace(Weapon):
     def __init__(self):
-        super().__init__('Mace', 20, 25, 115)
+        super().__init__('Mace', 15, 20, 115)
         self.description = 'Bashes the fuck out of armor at the cost of damage'
 
 
