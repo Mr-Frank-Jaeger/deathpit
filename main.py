@@ -62,7 +62,7 @@ def create_world():
     hallway.add_exit('south', entrance)
     gerblin = Character('Gerblin', 50, 5, Dagger(), 5)
     entrance.add_enemy(gerblin)
-    entrance.add_item(Leather_Armor)
+    entrance.add_item(Leather_Armor())
 
     # hallway
     hallway.add_exit('north', arena)
@@ -72,6 +72,7 @@ def create_world():
 
     #treasure
     chest = Chest(locked=True, contents=[Dickbutt()])
+    treasure.add_item(Chest())
 
     #arena
     arena.add_enemy(Character('Gerblin', 50, 5, Dagger(), 5))
@@ -138,7 +139,7 @@ def main():
                 break
         else:
             # no enemies, player can move or quit
-            action = input(Fore.GREEN + 'What do you want to do? (move/take/use/inventory/quit): ').lower() 
+            action = input(Fore.GREEN + 'What do you want to do? (move/take/use/equip/inventory/quit): ').lower() 
 
             if action == 'quit':
                 print('Thanks for playing!')
