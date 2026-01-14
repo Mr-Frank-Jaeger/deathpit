@@ -13,7 +13,9 @@ class Character:
         self.weapon = weapon
         self.dex = dex
         self.inventory = []
+        self.equiped_inventory = []
         self.drops = []
+        self.armor_rating = 0
 
     def add_item(self, item):
         # add item to inventory
@@ -26,6 +28,15 @@ class Character:
             if isinstance(item, item_type):
                 return item
         return None
+
+    def equip_item(self, item):
+        #equip an item that is in inventory
+        if has_item(item) == True:
+            self.equiped_inventory.append(item)
+            self.armor_rating = item.armor_rating
+            self.armor = self.armor + self.armor_rating
+        else:
+            print(f'{self.item} must be in your inventory to equip it!')
 
     def show_inventory(self):
         # display inventory to player
@@ -55,8 +66,8 @@ class Character:
 
     def defend(self):
         self.armor += int(self.armor + 5)
-        if self.armor >= 25:
-            self.armor = 25
+        if self.armor >= 25 + self.armor_rating:
+            self.armor = 25 + self.armor_rating
         print(f'{self.name} changes to defensive stance and increased armor to {self.armor}\n')
 
     def do_nothing(self):

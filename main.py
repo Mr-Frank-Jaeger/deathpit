@@ -13,6 +13,7 @@ from weapon import Sword, Mace, Dagger
 from room import Room
 from combat import combat
 from item import Key, Chest, Dickbutt
+from armor import Leather_Armor
 
 #charater creator
 def create_character():
@@ -61,6 +62,7 @@ def create_world():
     hallway.add_exit('south', entrance)
     gerblin = Character('Gerblin', 50, 5, Dagger(), 5)
     entrance.add_enemy(gerblin)
+    entrance.add_item(Leather_Armor)
 
     # hallway
     hallway.add_exit('north', arena)
@@ -70,7 +72,6 @@ def create_world():
 
     #treasure
     chest = Chest(locked=True, contents=[Dickbutt()])
-    treasure.add_item(chest)
 
     #arena
     arena.add_enemy(Character('Gerblin', 50, 5, Dagger(), 5))

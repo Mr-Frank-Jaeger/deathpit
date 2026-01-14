@@ -44,4 +44,9 @@ class Chest(Item):
 class Dickbutt(Item):
     def __init__(self):
         super().__init__('Tiny Figurine', 'A tiny figurine of what looks like a dick coming out of a butt that has a funny face.')
+
+class Armor(Item):
+    def __init__(self, armor_rating):
+        super().__init__('Armor', 'Armor that can be equiped')
+        self.armor_rating = 10
         
