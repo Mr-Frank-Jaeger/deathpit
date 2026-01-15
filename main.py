@@ -62,7 +62,7 @@ def create_world():
     hallway.add_exit('south', entrance)
     gerblin = Character('Gerblin', 50, 5, Dagger(), 5)
     entrance.add_enemy(gerblin)
-    entrance.add_item(Leather_Armor())
+    gerblin.drops.append(Leather_Armor())
 
     # hallway
     hallway.add_exit('north', arena)
@@ -139,7 +139,7 @@ def main():
                 break
         else:
             # no enemies, player can move or quit
-            action = input(Fore.GREEN + 'What do you want to do? (move/take/use/equip/inventory/quit): ').lower() 
+            action = input(Fore.GREEN + 'What do you want to do? (move/take/use/equip/inventory/equipment/quit): ').lower() 
 
             if action == 'quit':
                 print('Thanks for playing!')
@@ -148,6 +148,10 @@ def main():
             elif action == 'inventory':
                 player.show_inventory()
 
+            elif action == 'equipment':
+                player.show_equipment()
+
+            #take or equip items
             elif action == 'take':
                 if current_room.items:
                     print('Items in room:')
@@ -171,6 +175,20 @@ def main():
                 else:
                     print('Nothing here to take.\n')
             
+            elif action == 'equip':
+                print('Items in your inventory:')
+                for i, item in enumerate(player.inventory):
+                    print(f'{i+1}. {item.name}')
+
+                item_num = input('What do you want to equip? (enter number): ')
+                try:
+                    item_index = int(item_num) - 1
+                    if 0 <= item_index < len(player.inventory):
+                        item = player.inventory[item_index]
+                        player.equip_item(item)
+                except:
+                    print('Invalid choice!\n')
+
             elif action == 'use':
                 if current_room.items:
                     #check for chests

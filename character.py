@@ -6,16 +6,17 @@ import random
 
 #define player class
 class Character:
-    def __init__(self, name, health, armor, weapon, dex):
+    def __init__(self, name, health, armor, weapon, dex, armor_rating=10):
         self.name = name
         self.health = health
         self.armor = armor
         self.weapon = weapon
         self.dex = dex
         self.inventory = []
-        self.equiped_inventory = []
+        self.equipped_inventory = []
         self.drops = []
-        self.armor_rating = 0
+        self.armor_rating = armor_rating
+        #this is armor class
 
     def add_item(self, item):
         # add item to inventory
@@ -31,10 +32,12 @@ class Character:
 
     def equip_item(self, item):
         #equip an item that is in inventory
-        if has_item(item) == True:
-            self.equiped_inventory.append(item)
+        if item in self.inventory:
+            self.equipped_inventory.append(item)
             self.armor_rating = item.armor_rating
             self.armor = self.armor + self.armor_rating
+            self.inventory.remove(item)
+            print(f'{item.name} has been equipped.')
         else:
             print(f'{self.item} must be in your inventory to equip it!')
 
@@ -48,12 +51,27 @@ class Character:
                 print(f' - {item.name}: {item.description}')
             print()
 
+    def show_equipment(self):
+            # display equipment to player
+            if not self.equipped_inventory:
+                print('You have nothing equipped\n')
+            else:
+                print('Equipment:')
+                for item in self.equipped_inventory:
+                    print(f' - {item.name}: {item.description}')
+                print()
+
     def attack(self, target):
         dodge_chance = random.randint(1,100)
         dodge_chance += target.dex
         if dodge_chance >=90:
             print(f'{self.name} swings at {target.name}...')
             print(f'{target.name} dodged the attack!\n')
+            return
+        roll_to_hit = random.randint(1,20)
+        print(f'{self.name} rolls a {roll_to_hit}!')
+        if roll_to_hit < target.armor_rating:
+            print(f'{self.name} misses the attack on {target.name}')
             return
         damage = int(self.weapon.damage - target.armor)
         if damage <= 0:
@@ -66,8 +84,8 @@ class Character:
 
     def defend(self):
         self.armor += int(self.armor + 5)
-        if self.armor >= 25 + self.armor_rating:
-            self.armor = 25 + self.armor_rating
+        if self.armor >= 15 + self.armor_rating:
+            self.armor = 15 + self.armor_rating
         print(f'{self.name} changes to defensive stance and increased armor to {self.armor}\n')
 
     def do_nothing(self):
@@ -77,7 +95,8 @@ class Character:
         return self.health > 0
 
     def stats(self):
+        # armor class AC is armor_rating
         print('---------------------------------')
-        print(f'{self.name} health:{self.health} armor:{self.armor} weapon:{self.weapon.name}')
+        print(f'{self.name} health:{self.health} armor:{self.armor} weapon:{self.weapon.name} AC:{self.armor_rating}')
         print('---------------------------------')
 

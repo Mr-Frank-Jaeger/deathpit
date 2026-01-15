@@ -4,7 +4,7 @@
 #define armor
 class Armor:
     armors = []
-    def __init__(self, name, armor_rating, cost, description='a peice of armor'):
+    def __init__(self, name, armor_rating, cost, description='a peice of armor.'):
         self.name = name
         self.armor_rating = armor_rating
         self.cost = cost
@@ -20,6 +20,6 @@ class Leather_Armor(Armor):
     #every fuction method always gets self
     def __init__(self):
         #super calls the constructor of the parent class Armors
-        super().__init__('Leather Armor', 10, 75)
-        self.description = 'A simple leather vest'
+        super().__init__('Leather Armor', 11, 75)
+        self.description = 'A simple leather vest. AC+1'
         print(self.name)
