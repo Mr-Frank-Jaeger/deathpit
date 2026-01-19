@@ -144,16 +144,16 @@ def main():
                 # User is impatient and sends something like 'move north' or 'take 1'
                 action, tgt = choice.split()
             except ValueError:
+                # only a single word, the action, was typed
                 action = choice
+                item_num = None
+                direction = None
             else:
                 try:
                     item_num = int(tgt)
                 except ValueError:
                     # target of action is not a number; must be a direction
-                    item_num = None
                     direction = tgt.strip()
-                else:
-                    direction = None
 
             if action == 'quit':
                 print('Thanks for playing!')
